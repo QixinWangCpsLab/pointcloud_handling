@@ -51,7 +51,8 @@ def get_transform_matrices(position, roll, yaw, pitch, scale=100):
     rot_matrix = roll_matrix @ (pitch_matrix @ yaw_matrix)
 
     # Translation matrix, scaling the position coordinates
-    trans_matrix = np.array([position[0] * scale, position[1] * scale, position[2] * scale])
+    # 1， 2， 0 is right
+    trans_matrix = np.array([0 - position[1] * scale, 0 - position[2] * scale, 0 - position[0] * scale])
 
     return rot_matrix, trans_matrix
 
@@ -85,7 +86,7 @@ def merge_clouds(cloud_dirs, every_k_points=10):
         print(f"Downsampled point cloud size: {len(cloud.points)}")
 
         # Calculate rotation and translation matrices
-        rot_matrix, trans_matrix = get_transform_matrices(position, roll=0, yaw=0 ,pitch=pitch, scale=100)
+        rot_matrix, trans_matrix = get_transform_matrices(position, roll=0, yaw=0 ,pitch=pitch, scale=1000)
 
         # Apply rotation and translation transformations
         rotated_points = np.asarray(cloud.points) @ rot_matrix.T
